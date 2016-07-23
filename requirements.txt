@@ -1,7 +1,12 @@
+click==6.6
 ConcurrentLogHandler==0.9.1
 docutils==0.12
+Flask==0.11.1
+itsdangerous==0.24
+Jinja2==2.8
 lockfile==0.12.2
 luigi==2.2.0
+MarkupSafe==0.23
 numpy==1.11.1
 pandas==0.18.1
 python-daemon==2.1.1
@@ -9,3 +14,4 @@ python-dateutil==2.5.3
 pytz==2016.6.1
 six==1.10.0
 tornado==4.4
+Werkzeug==0.11.10
