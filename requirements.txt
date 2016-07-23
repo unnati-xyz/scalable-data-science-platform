@@ -1,0 +1,11 @@
+ConcurrentLogHandler==0.9.1
+docutils==0.12
+lockfile==0.12.2
+luigi==2.2.0
+numpy==1.11.1
+pandas==0.18.1
+python-daemon==2.1.1
+python-dateutil==2.5.3
+pytz==2016.6.1
+six==1.10.0
+tornado==4.4
