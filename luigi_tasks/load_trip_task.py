@@ -1,0 +1,25 @@
+import traceback
+import luigi
+from luigi.mock import MockTarget
+
+from idli import LOGGER
+from idli.utils.luigi import complete_task
+from idli.analytics.data_load.bay_bike_share import BayBikeShare
+
+class LoadTripTask(luigi.Task):
+
+    def output(self):
+        return MockTarget("load-trip-task")
+
+    def run(self):
+
+        try:
+            LOGGER.info("starting load trip task")
+            bike_share = BayBikeShare()
+            bike_share.load_data()
+
+            LOGGER.info("Load trip data complete")
+            complete_task(self.output())
+
+        except Exception as e:
+            LOGGER.error(traceback.format_exc())
