@@ -1,8 +1,9 @@
 configuration = {}
 
-configuration['user'] = 'analytics_user'
+configuration['db'] = 'postgresql'
+configuration['user'] = 'postgres'
 configuration['host'] = 'localhost'
-configuration['port'] = 2222
+configuration['port'] = 5432
 configuration['db_name'] = 'bike_share'
 configuration['password'] = 'postgres'
 
