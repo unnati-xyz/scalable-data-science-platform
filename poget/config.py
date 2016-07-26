@@ -10,4 +10,3 @@ configuration['password'] = 'postgres'
 configuration['flask_host'] = '0.0.0.0'
 configuration['flask_port'] = 5000
 configuration['flask_debug'] = 'Y'
-configuration['flask_auth_key'] = "boratrockz!"

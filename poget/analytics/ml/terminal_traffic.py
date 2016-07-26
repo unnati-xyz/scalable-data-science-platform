@@ -9,7 +9,7 @@ from poget.analytics.ml.logistic_regression import LogisticRegression
 
 # ## Hypothesis 1
 #
-# ### Given a time slot and terminal code, predict if the terminal has high traffic
+# Given a time slot and terminal code, predict if the terminal has high traffic
 class TerminalTraffic:
 
     def get_data(self):
@@ -17,7 +17,7 @@ class TerminalTraffic:
 
             conn = DBConn().get_connection()
             query = '''SELECT * from trips '''
-            LOGGER.info("Reading data from db : %s"%(query))
+            LOGGER.info("Reading data from db : %s" % (query))
             df = pd.read_sql(query, con=conn)
 
             return df
@@ -25,7 +25,6 @@ class TerminalTraffic:
         except Exception as e:
             LOGGER.error(traceback.format_exc())
             raise e
-
 
     # ### Feature engineering
     #
@@ -37,7 +36,7 @@ class TerminalTraffic:
     def generate_feature_from_data(self, inp_data):
         try:
             LOGGER.info("Generating features from data")
-            LOGGER.info("Input data has the shape %s"%str(inp_data.shape))
+            LOGGER.info("Input data has the shape %s" % str(inp_data.shape))
 
             inp_data['start_hour'] = inp_data["Start Date"].apply(mlUtils.get_hour)
             inp_data['start_day'] = inp_data["Start Date"].apply(mlUtils.get_day)
@@ -53,18 +52,21 @@ class TerminalTraffic:
 
             LOGGER.info(start_df.head())
 
+            LOGGER.info("creating start df")
             # getting only the required columns
             start_df = start_df.ix[:, ["start_hour", "start_day", "Start Terminal", "Trip ID"]]
             start_df.columns = ["hour", "day", "terminal_code", "trip_id"]
             start_df.head()
 
 
+            LOGGER.info("creating end df")
             end_df = inp_data.groupby(by=["end_hour", "end_day", "End Terminal"]).count().copy()
             end_df = end_df.reset_index()
             end_df = end_df.ix[:, ["end_hour", "end_day", "End Terminal", "Trip ID"]]
             end_df.columns = ["hour", "day", "terminal_code", "trip_id"]
             LOGGER.info(end_df.head())
 
+            LOGGER.info("merging start and end df")
             # merge start and end data frames to generate traffic counts for a terminal
             merged_df = start_df.merge(end_df, how="inner", on=["hour", "day", "terminal_code"])
 
@@ -72,18 +74,45 @@ class TerminalTraffic:
             merged_df["trip_count"] = merged_df["trip_id_x"] + merged_df["trip_id_y"]
             merged_df = merged_df.ix[:, ["hour", "day", "terminal_code", "trip_count"]]
 
+            return merged_df
+
+        except Exception as e:
+                LOGGER.error(traceback.format_exc())
+                raise e
+
+    def generate_target(self, df):
+
+        try:
+            LOGGER.info("generating target column")
             # generate target variables
-            merged_df.trip_count.mean()
-            merged_df["target"] = 0
-            merged_df.ix[(merged_df.trip_count > merged_df.trip_count.mean()), "target"] = 1
-            merged_df.target.value_counts()
+            df.trip_count.mean()
+            df["target"] = 0
+            df.ix[(df.trip_count > df.trip_count.mean()), "target"] = 1
+            df.target.value_counts()
+            return df
 
-            #use this data to train the model and predict
+        except Exception as e:
+                LOGGER.error(traceback.format_exc())
+                raise e
+
+    def train_test_model(self, df):
+        try:
+            # use this data to train the model and predict
             model = LogisticRegression()
-            model.test_train(df=merged_df, target='target', train_split=0.8, test_split=0.2)
+            LOGGER.info("training the model")
+            model.test_train(df=df, target='target', train_split=0.8, test_split=0.2)
 
+        except Exception as e:
+                LOGGER.error(traceback.format_exc())
+                raise e
 
+    def train_model(self, df):
+        try:
+            # use this data to train the model and predict
+            model = LogisticRegression()
+            model.train(df=df, target='target')
 
+            return model
 
         except Exception as e:
             LOGGER.error(traceback.format_exc())
@@ -93,4 +122,6 @@ class TerminalTraffic:
 if __name__ == '__main__':
     terminal_traffic = TerminalTraffic()
     data = terminal_traffic.get_data()
-    terminal_traffic.generate_feature_from_data(inp_data=data)
+    df = terminal_traffic.generate_feature_from_data(inp_data=data)
+    terminal_traffic.generate_target(df=df)
+    terminal_traffic.train_test_model(df=df)
