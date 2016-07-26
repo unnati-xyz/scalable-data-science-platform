@@ -5,7 +5,7 @@ from functools import wraps
 
 from . import app, cfg
 from . import terminal_traffic
-from poget.analytics.ml.linear_regression import LinearRegression
+from poget.analytics.ml.logistic_regression import LogisticRegression
 from poget import API_LOGGER as LOGGER
 
 
@@ -47,23 +47,6 @@ def get_timeslot():
             response.append(response_dict)
 
         return jsonify(data=response, error=False)
-
-    except Exception as e:
-        LOGGER.error(traceback.format_exc())
-        abort(500)
-
-@app.route("/admin/reload/probCall", methods=["GET"])
-@secure
-def reload_prob_call():
-
-    try:
-        dir = os.getcwd()
-        main_dir = os.path.join(dir, prob_call.main_directory,  prob_call.models_directory, prob_call.name)
-
-        p_call = ProbabilityOfCall()
-        p_call.train_model()
-        rf_model.load(main_dir)
-        return jsonify(data="OK", error=False)
 
     except Exception as e:
         LOGGER.error(traceback.format_exc())

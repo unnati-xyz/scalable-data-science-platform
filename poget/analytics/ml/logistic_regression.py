@@ -2,7 +2,7 @@ import os
 import shutil
 from pyspark import SparkConf, SparkContext,SQLContext
 from pyspark.mllib.regression import LabeledPoint
-from pyspark.mllib.classification import LogisticRegressionWithLBFGS
+from pyspark.mllib.classification import LogisticRegressionWithLBFGS, LogisticRegressionModel
 
 from poget import LOGGER
 
@@ -113,6 +113,6 @@ class LogisticRegression:
 
     def load(self, location):
         try:
-            self.model = LogisticRegressionWithLBFGS.load(self.sc, location)
+            self.model = LogisticRegressionModel.load(self.sc, location)
         except Exception as e:
             raise e
