@@ -2,9 +2,9 @@ import traceback
 import luigi
 from luigi.mock import MockTarget
 
-from idli import LOGGER
-from idli.utils.luigi import complete_task
-from idli.analytics.data_load.bay_bike_share import BayBikeShare
+from poget import LOGGER
+from poget.utils.luigi import complete_task
+from poget.analytics.data_load.bay_bike_share import BayBikeShare
 
 class LoadTripTask(luigi.Task):
 
