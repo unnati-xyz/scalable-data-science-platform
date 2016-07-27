@@ -99,3 +99,42 @@ We will be covering the following topics for API:
 - Knowledge of software engineering:
   - Understanding scalability and high available systems
 
+## Setup
+
+We use Vagrant along with Virtual Box to make our job easier
+
+- To get started you will need Virtual Box. Go download it from
+  [here](https://www.virtualbox.org/wiki/Downloads). It has been tested end
+  to end on 5.0 but 5.1 should work just fine as well.
+- Once Virtual Box is installed, install Vagrant from
+  [here](https://www.vagrantup.com/downloads.html).
+
+By the end of these 2 steps, you should have the `vagrant` executable in your
+path.
+
+Once this is done, clone the repository into a location of your choice
+
+```
+git clone https://github.com/unnati-xyz/fifthel-2016-workshop.git
+```
+
+Then `cd` into the repository directory
+
+```
+cd fifthel-2016-workshop
+```
+
+From here, you want to bring up the vagrant box. Its quite simple
+
+```
+vagrant up
+```
+
+This will download the Unnati image and start up the virtual machine. Next
+SSH into the machine
+
+```
+vagrant ssh
+```
+
+Following this, if you see a prompt, then you're good to go :)
