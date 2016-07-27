@@ -1,19 +1,22 @@
 import os
 import traceback
 from flask import jsonify, request, abort
-from functools import wraps
 
-from . import app, cfg
-from . import terminal_traffic
+from . import app
 from poget.analytics.ml.logistic_regression import LogisticRegression
+from poget.analytics.ml.terminal_traffic import TerminalTraffic
 from poget import API_LOGGER as LOGGER
 
 
-LOGGER.info("predictTime route")
 dir = os.getcwd()
 lr_model = LogisticRegression()
-lr_model.load("poget/data/traffic")
+name = 'terminal-traffic'
+main_directory = 'poget'
+models_directory = 'models'
+dir = os.getcwd()
+main_dir = os.path.join(dir, main_directory, models_directory, name)
 
+lr_model.load(main_dir)
 
 
 @app.route("/health")
@@ -26,28 +29,34 @@ def get_timeslot():
     try:
 
         payload = request.get_json()
-        phone_numbers = payload["phoneNumbers"]
+        LOGGER.info("payload is %s" % payload)
+        data = payload["data"]
 
-        df = prob_call.get_data_for_number(phone_number_list=phone_numbers)
-        LOGGER.info("phone details")
-        LOGGER.info(df)
-        LOGGER.info("will predict time slot for phone number %s"%phone_numbers)
+        terminal_traffic = TerminalTraffic()
+        LOGGER.info("build features for payload")
+        df = terminal_traffic.get_features_for_prediction(data)
+
+        LOGGER.info("will predict traffic for %s" % data)
         LOGGER.info(df)
 
-        prediction = rf_model.predict(df)
+        prediction = lr_model.predict(df=df)
         LOGGER.info(type(prediction))
+
         response = []
         for i in range(0,len(prediction)):
             response_dict = {}
-            response_dict['phone_number'] = phone_numbers[i]
-            max_time = int(prediction[i]) * 4
-            min_time = int(max_time) - 4
-            time_slot = str(min_time) + '-' + str(max_time)
-            response_dict['time_slot'] = time_slot
+            response_dict['hour_slot'] = data[i]["hour_slot"]
+            response_dict['day_of_week'] = data[i]["day_of_week"]
+            response_dict['terminal_code'] = data[i]["terminal_code"]
+            if int(prediction[i] is 0):
+                response_dict["traffic"] = "low"
+            else:
+                response_dict["traffic"] = "high"
+
             response.append(response_dict)
 
         return jsonify(data=response, error=False)
 
-    except Exception as e:
+    except Exception:
         LOGGER.error(traceback.format_exc())
         abort(500)
