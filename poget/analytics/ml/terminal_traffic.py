@@ -1,4 +1,5 @@
 import traceback
+import json
 import pandas as pd
 from poget.utils.db import DBConn
 import poget.utils.ml as mlUtils
@@ -87,6 +88,19 @@ class TerminalTraffic:
                 LOGGER.error(traceback.format_exc())
                 raise e
 
+    def get_features_for_prediction(self, data):
+
+        try:
+            json_data = json.dumps(data)
+            df = pd.read_json(json_data)
+            LOGGER.info("feature set is")
+            LOGGER.info(df.head())
+
+            return df
+        except Exception:
+            LOGGER.error(traceback.format_exc())
+            raise
+
     def generate_target(self, df):
 
         try:
@@ -96,6 +110,8 @@ class TerminalTraffic:
             df["target"] = 0
             df.ix[(df.trip_count > df.trip_count.mean()), "target"] = 1
             df.target.value_counts()
+
+            df = df.ix[:, ["hour", "day", "terminal_code", "target"]]
             return df
 
         except Exception as e:

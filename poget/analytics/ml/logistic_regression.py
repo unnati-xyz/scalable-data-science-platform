@@ -99,7 +99,7 @@ class LogisticRegression:
 
     def predict(self, df):
         try:
-            LOGGER.info("Predicting using random forest")
+            LOGGER.info("Predicting using logistic regression")
             spark_df = self.sql_context.createDataFrame(df)
             feature_columns = spark_df.columns
             inp_data = spark_df.select(*feature_columns).map(lambda x: list(x))
