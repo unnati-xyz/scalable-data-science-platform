@@ -11,7 +11,7 @@ import os
 
 class TerminalTrafficTrainTask(luigi.Task):
 
-    def __init__(self):
+    def set_path(self):
         self.name = 'terminal-traffic'
         self.main_directory = 'poget'
         self.models_directory = 'models'
@@ -34,6 +34,7 @@ class TerminalTrafficTrainTask(luigi.Task):
 
             LOGGER.info("train traffic model")
             model = terminal_traffic.train_model(df)
+            self.set_path()
             dir = os.getcwd()
             main_dir = os.path.join(dir, self.main_directory,  self.models_directory, self.name)
             LOGGER.info("persisting predictive model")
