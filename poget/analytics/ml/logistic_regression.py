@@ -82,12 +82,12 @@ class LogisticRegression:
             data = 'data'
             meta_data = 'metadata'
 
-            data_location = os.path.join(location,data)
+            data_location = os.path.join(location, data)
             if os.path.exists(data_location):
                 LOGGER.info("Removing directory %s"%data_location)
                 shutil.rmtree(data_location)
 
-            data_location = os.path.join(location,meta_data)
+            data_location = os.path.join(location, meta_data)
             if os.path.exists(data_location):
                 LOGGER.info("Removing directory %s"%data_location)
                 shutil.rmtree(data_location)

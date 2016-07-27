@@ -5,12 +5,20 @@ import poget.utils.ml as mlUtils
 from poget import LOGGER
 
 from poget.analytics.ml.logistic_regression import LogisticRegression
+import os
 
 
 # ## Hypothesis 1
 #
 # ### Given a time slot and terminal code, predict if the terminal has high traffic
 class TerminalTraffic:
+
+
+    def __init__(self):
+        self.name = 'terminal-traffic'
+        self.main_directory = 'poget'
+        self.models_directory = 'models'
+        self.name = 'prob_call'
 
     def get_data(self):
         try:
@@ -76,15 +84,30 @@ class TerminalTraffic:
             merged_df.trip_count.mean()
             merged_df["target"] = 0
             merged_df.ix[(merged_df.trip_count > merged_df.trip_count.mean()), "target"] = 1
-            merged_df.target.value_counts()
 
+            return merged_df
+
+        except Exception as e:
+            LOGGER.error(traceback.format_exc())
+            raise e
+
+    def test_train(self, inp_data):
+        try:
             #use this data to train the model and predict
             model = LogisticRegression()
-            model.test_train(df=merged_df, target='target', train_split=0.8, test_split=0.2)
+            model.test_train(df=inp_data, target='target', train_split=0.8, test_split=0.2)
+        except Exception as e:
+            LOGGER.error(traceback.format_exc())
+            raise e
 
-
-
-
+    def train(self, inp_data):
+        try:
+            #use this data to train the model and predict
+            model = LogisticRegression()
+            model.train(df=inp_data, target='target')
+            dir = os.getcwd()
+            main_dir = os.path.join(dir, self.main_directory,  self.models_directory, self.name)
+            model.persist(main_dir)
         except Exception as e:
             LOGGER.error(traceback.format_exc())
             raise e
