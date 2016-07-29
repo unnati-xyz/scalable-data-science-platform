@@ -43,8 +43,6 @@ vagrant ssh
 
 Following this, if you see a prompt, then you're good to go :)
 
----
-
 ## Setup without Vagrant
 
 We **thoroughly** recommend that you use vagrant so that you have everything setup for you. However if you insist on not using it for whatsoever reason (corporate laptop, etc) then the following steps are for you.
