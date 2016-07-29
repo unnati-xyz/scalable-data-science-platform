@@ -43,6 +43,145 @@ vagrant ssh
 
 Following this, if you see a prompt, then you're good to go :)
 
+---
+
+## Setup without Vagrant
+
+We **thoroughly** recommend that you use vagrant so that you have everything setup for you. However if you insist on not using it for whatsoever reason (corporate laptop, etc) then the following steps are for you.
+
+The Vagrant box is created with **precisely** the same following steps. We use a Ubuntu 14.04 32 bit Operating System as the base for installation. 
+
+---
+
+Update your `apt`
+
+```
+$ sudo apt-get update
+```
+
+Install the required packages
+
+```
+$ sudo apt-get install build-essential python3-dev python3-pip postgresql-9.3 postgresql-server-dev-9.3 openjdk-7-jdk openjdk-7-jre git-core
+```
+
+Install Apache Spark
+
+```
+$ cd 
+$ wget http://d3kbcqa49mib13.cloudfront.net/spark-1.6.1-bin-hadoop2.6.tgz
+$ tar zxvf spark-1.6.1-bin-hadoop2.6.tgz
+$ rm spark-1.6.1-bin-hadoop2.6.tgz
+```
+
+Next, you need to set a few required environment variables for things to work. This step might change based on your installation
+
+Create a `.exports` file in your home dir to be sourced
+
+```
+$ touch ~/.exports
+```
+
+Set the `JAVA_HOME` to where the `JDK` is installed
+
+```
+$ echo "export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-i386" >> ~/.exports
+```
+
+Add `pyspark`'s `bin` directory to `PATH`
+
+```
+$ echo "export PATH=/home/vagrant/spark-1.6.1-bin-hadoop2.6/bin:$PATH" >> ~/.exports
+```
+
+Set the `SPARK_HOME` variable
+
+```
+$ echo "export SPARK_HOME=/home/vagrant/spark-1.6.1-bin-hadoop2.6" >> ~/.exports
+```
+
+Set `PYTHONPATH` according to the `SPARK_HOME` variable
+
+```
+$ echo "export PYTHONPATH=\$SPARK_HOME/python:\$SPARK_HOME/python/lib/py4j-0.9-src.zip" >> ~/.exports
+```
+
+_**Note**: The `\` is for escaping the `$` so that the `$SPARK_HOME` variable isn't evaluated when being added into the file_
+
+You also need to add the repository location into `PYTHONPATH`
+
+```
+$ echo "export PYTHONPATH=$PYTHONPATH:/path/to/fifthel-2016-workshop/dir" >> ~/.exports
+```
+
+Finally we tell Spark to use Python 3 over 2
+
+```
+$ echo "export PYSPARK_PYTHON=/usr/bin/python3" >> ~/.exports
+```
+
+We need the `~/.exports` file to be sourced when the shell starts up, so lets do that 
+
+```
+$ echo "source ~/.exports" >> ~/.bashrc
+```
+
+Next, install all the packages from `requirements.txt` in the repository. **Note**: Since we use vagrant, we install the packages globally. But you might not want to do that if you're installing this on your system. A Virtual environment with `virtualenv` is recommended. Make sure that you create a `virtualenv` with `python3` if you are going down this path.
+
+```
+$ cd /path/to/fifthel-2016-workshop/dir
+$ sudo pip3 install -r requirements.txt
+```
+
+If your PostgreSQL is already configured, then you can skip the following step.
+
+We need to set a password for the `postgres` user and allow login. In order to do this, first login via the `postgres` OS user and set the password using `psql`
+
+```
+$ sudo su - postgres
+$ psql
+postgres=# alter user postgres with password 'postgres';
+postgres=# \q
+$ logout
+```
+
+Back as your regular user, Edit the `pg_hba.conf` 
+
+```
+$ sudo vim /etc/postgresql/9.4/main/pg_hba.conf
+```
+
+and set change the following line
+
+```
+local		all			postgres		peer
+```
+
+To
+
+```
+local		all			postgres		md5
+```
+
+And restart PostgreSQL
+
+```
+$ sudo service postgresql restart
+```
+
+Now running `psql` should ask you for the password
+
+```
+$ psql -U postgres
+Password for user postgres:
+```
+
+Enter `postgres` at the prompt and you should see the psql prompt.
+
+---
+
+After you've done all this, you should be setup for the workshop :)
+
 ## Abstract
 
 "In theory, there is no difference between theory and practice. But in
