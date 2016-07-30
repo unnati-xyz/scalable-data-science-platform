@@ -14,7 +14,6 @@ import os
 # Given a time slot and terminal code, predict if the terminal has high traffic
 class TerminalTraffic:
 
-
     def __init__(self):
         self.name = 'terminal-traffic'
         self.main_directory = 'poget'
@@ -22,12 +21,10 @@ class TerminalTraffic:
 
     def get_data(self):
         try:
-
             conn = DBConn().get_connection()
             query = '''SELECT * from trips '''
             LOGGER.info("Reading data from db : %s" % (query))
             df = pd.read_sql(query, con=conn)
-
             return df
 
         except Exception as e:
