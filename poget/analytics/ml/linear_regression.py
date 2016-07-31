@@ -2,6 +2,7 @@ import os
 import shutil
 from pyspark import SparkConf, SparkContext,SQLContext
 from pyspark.mllib.regression import LabeledPoint, LinearRegressionWithSGD
+from decimal import Decimal
 
 from poget import LOGGER
 
@@ -30,17 +31,16 @@ class LinearRegression:
             zipped = y_train.zip(X_train)
             train_data = zipped.map(lambda x: LabeledPoint(x[0], x[1]))
 
-            linear_model = LinearRegressionWithSGD.train(train_data)
+            linear_model = LinearRegressionWithSGD.train(train_data, intercept=True)
 
             X_test = test.select(*feature_columns).map(lambda x: list(x))
             y_test = test.select(target).map(lambda x: x[0])
 
             prediction = X_test.map(lambda lp: (float(linear_model.predict(lp))))
-            prediction_and_label = prediction.zip(y_test)
+            label_and_prediction = prediction.zip(y_test)
+            val = label_and_prediction.map(lambda vp: (Decimal(vp[0]) - Decimal(vp[1])) ** 2).reduce(lambda x, y: x + y)/label_and_prediction.count()
 
-            MSE = prediction_and_label.map(lambda (v, p): (v - p) ** 2).reduce(lambda x, y: x + y) / prediction_and_label.count()
-
-            LOGGER.info(prediction_and_label.map(lambda (labelAndPred[0], labelAndPred[1]): labelAndPred[0] == labelAndPred[1]).mean())
+            LOGGER.info(val)
         except Exception as e:
             raise e
 
@@ -59,7 +59,7 @@ class LinearRegression:
             zipped = y_train.zip(X_train)
             train_data = zipped.map(lambda x: LabeledPoint(x[0], x[1]))
 
-            linear_model = LinearRegressionWithSGD.train(train_data)
+            linear_model = LinearRegressionWithSGD.train(train_data, intercept=True)
 
             self.model = linear_model
 
