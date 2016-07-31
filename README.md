@@ -3,6 +3,7 @@
 
 [Link](https://fifthelephant.talkfunnel.com/2016/64-building-a-scalable-data-science-platform-luigi-ap)
 
+[Slides](https://speakerdeck.com/unnati_xyz/building-scalable-data-science-pipeline)
 ## Setup
 
 We use Vagrant along with Virtual Box to make our job easier
