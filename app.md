@@ -2,7 +2,18 @@
 
 ## Folder structure
 
-![](https://github.com/unnati-xyz/fifthel-2016-workshop/blob/master/proj-structure.png)
+```
+.
+├───data
+├───logs
+├───luigi_tasks
+└───poget
+    ├───analytics
+    │   ├───data_load
+    │   └───ml
+    ├───api
+    └───utils
+```
 
 ### data
 This folder contains all the csv files required to run the project
