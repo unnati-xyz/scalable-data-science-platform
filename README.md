@@ -5,6 +5,23 @@
 
 [How do I run the project after the setup is done?](https://github.com/unnati-xyz/fifthel-2016-workshop/blob/master/app.md)
 
+## Abstract
+
+"In theory, there is no difference between theory and practice. But in
+practice, there is." - Yogi Berra
+
+Once the task of prototyping a data science solution has been accomplished on a
+local machine, the real challenge begins in how to make it work in production.
+To ensure that the plumbing of the data pipeline will work in production at
+scale is both an art and a science. The science involves understanding the
+different tools and technologies needed to make the data pipeline connect,
+while the art involves making the trade-offs needed to tune the data pipeline
+  so that it flows.
+
+In this workshop, you will learn how to build a scalable data science platform
+with set up and conduct data engineering using Pandas and Luigi, build a
+machine learning model with Apache Spark and deploy it as predictive api with
+Flask
 
 ## Setup
 
@@ -182,24 +199,6 @@ Enter `postgres` at the prompt and you should see the psql prompt.
 ---
 
 After you've done all this, you should be setup for the workshop :)
-
-## Abstract
-
-"In theory, there is no difference between theory and practice. But in
-practice, there is." - Yogi Berra
-
-Once the task of prototyping a data science solution has been accomplished on a
-local machine, the real challenge begins in how to make it work in production.
-To ensure that the plumbing of the data pipeline will work in production at
-scale is both an art and a science. The science involves understanding the
-different tools and technologies needed to make the data pipeline connect,
-while the art involves making the trade-offs needed to tune the data pipeline
-  so that it flows.
-
-In this workshop, you will learn how to build a scalable data science platform
-with set up and conduct data engineering using Pandas and Luigi, build a
-machine learning model with Apache Spark and deploy it as predictive api with
-Flask
 
 ## Outline
 
