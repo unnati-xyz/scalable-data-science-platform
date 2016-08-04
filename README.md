@@ -4,6 +4,10 @@
 [Link](https://fifthelephant.talkfunnel.com/2016/64-building-a-scalable-data-science-platform-luigi-ap)
 
 [Slides](https://speakerdeck.com/unnati_xyz/building-scalable-data-science-pipeline)
+
+[How do I run the project after the setup is done?](https://github.com/unnati-xyz/fifthel-2016-workshop/blob/master/app.md)
+
+
 ## Setup
 
 We use Vagrant along with Virtual Box to make our job easier
