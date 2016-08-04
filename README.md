@@ -1,9 +1,7 @@
 # Building a scalable Data Science Platform ( Luigi, Apache Spark, Pandas, Flask)
 > Fifth Elephant 2016
 
-[Link](https://fifthelephant.talkfunnel.com/2016/64-building-a-scalable-data-science-platform-luigi-ap)
-
-[Slides](https://speakerdeck.com/unnati_xyz/building-scalable-data-science-pipeline)
+[[ Proposal ]](https://fifthelephant.talkfunnel.com/2016/64-building-a-scalable-data-science-platform-luigi-ap) [[ Slides] ](https://speakerdeck.com/unnati_xyz/building-scalable-data-science-pipeline)
 
 [How do I run the project after the setup is done?](https://github.com/unnati-xyz/fifthel-2016-workshop/blob/master/app.md)
 
